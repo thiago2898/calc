@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="src/styles.css">
+    <title>Calculadora informacional</title>
+</head>
+
+<body>
+    <div class="principal-container">
+        <div class="calculator-container">
+
+
+            <div class="output-container">
+                <p class="output-content" id="output"></p>
+            </div>
+
+            <div class="keyboard-container">
+                <div class="keyboard" id="calculator-keyboard">
+                    <button name="button">1</button>
+
+                    <button name="button">2</button>
+
+                    <button name="button">3</button>
+
+                    <button name="button">4</button>
+
+                    <button name="button">5</button>
+
+                    <button name="button">6</button>
+
+                    <button name="button">7</button>
+
+                    <button name="button">8</button>
+
+                    <button name="button">9</button>
+
+                    <button name="expression">+</button>
+
+                    <button name="expression">-</button>
+
+                    <button id="result">=</button>
+
+                    <button id="delete">C</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/14.7.0/math.min.js"></script>
+
+    <script type="module">
+
+        const calculatorOutput = document.getElementById("output")
+        const numbers = document.getElementsByName("button")
+        const expressions = document.getElementsByName("expression")
+        const resultButton = document.getElementById("result")
+        const deleteTextButton = document.getElementById("delete")
+
+        let num1 = ""
+        let expression = ""
+        let num2 = ""
+
+        let string = ""
+
+        let typingNumber = 1
+
+        function escribe() {
+            return string = `${num1} ${expression} ${num2}`
+        }
+
+        numbers.forEach((b) => {
+            b.addEventListener('click', () => {
+                if (typingNumber === 1) {
+                    num1 += b.textContent
+                } else {
+                    num2 += b.textContent
+                }
+
+                calculatorOutput.innerText = escribe()
+
+            })
+        })
+
+        expressions.forEach((e) => {
+            e.addEventListener('click', () => {
+                if (num1 !== "") {
+                    expression = " " + e.textContent + " "
+                    typingNumber = 2
+
+                    calculatorOutput.innerText = escribe()
+                }
+            })
+        })
+
+        resultButton.addEventListener('click', () => {
+            if (calculatorOutput.textContent.trim() !== "") {
+                if (num1 !== "" && num2 !== "" && expression !== "") {
+                    calculatorOutput.innerText = math.evaluate(calculatorOutput.textContent)
+                    typingNumber = 1
+
+                    num1 = calculatorOutput.innerText
+                    num2 = ""
+                    expression = ""
+
+                    escribe()
+                } else {
+                    alert("Use todos os campos para que o cálculo seja bem sucedido.")
+                }
+            } else {
+                alert("Escreva algo para começar a calcular!")
+            }
+        })
+
+        deleteTextButton.addEventListener('click', () => {
+            calculatorOutput.innerText = ""
+            typingNumber = 1
+
+            num1 = ""
+            num2 = ""
+            expression = ""
+
+            escribe()
+        })
+    </script>
+
+</body>
+
+</html>
